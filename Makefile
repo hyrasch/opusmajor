@@ -42,3 +42,7 @@ argocd-install:
 .PHONY: argocd-apply
 argocd-apply:
 	kubectl apply -f argocd/application.yaml
+
+.PHONY: open
+open:
+	minikube service player-data-api
