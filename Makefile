@@ -22,8 +22,8 @@ docker-push:
 
 .PHONY: docker-publish
 docker-publish: docker-build docker-push
-	cd k8s/base && kubectl kustomize edit set image player-data-api=$(FULL_IMAGE)
-	git add k8s/base/kustomization.yaml
+	cd k8s/base && kustomize edit set image player-data-api=$(FULL_IMAGE)
+	git add .
 	git commit -m "chore: bump image to $(IMAGE_TAG)"
 	git push
 

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: player-data-api
-          image: docker.io/lanrell/player-data-api:latest
+          image: player-data-api
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
