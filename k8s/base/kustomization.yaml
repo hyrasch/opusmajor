@@ -6,4 +6,4 @@ resources:
 images:
 - name: player-data-api
   newName: docker.io/lanrell/player-data-api
-  newTag: v1.0.0-1-gd4e8095
+  newTag: v1.0.0-2-g275a4b6
