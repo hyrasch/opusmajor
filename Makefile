@@ -33,6 +33,12 @@ deploy:
 undeploy:
 	kubectl delete -k k8s/overlays/local
 
+.PHONY: argocd-install
+argocd-install:
+	kubectl create namespace argocd --dry-run=client -o yaml | kubectl apply -f -
+	kubectl apply -n argocd --server-side --force-conflicts -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+	kubectl wait --for=condition=available --timeout=120s deployment/argocd-server -n argocd
+
 .PHONY: argocd-apply
 argocd-apply:
 	kubectl apply -f argocd/application.yaml
