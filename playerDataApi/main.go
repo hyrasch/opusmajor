@@ -28,6 +28,7 @@ func main() {
 	slog.SetDefault(logger)
 
 	mux := http.NewServeMux()
+	mux.HandleFunc("GET /healthz", handleHealth)
 	mux.HandleFunc("GET /player-data", handlePlayerData)
 
 	port := os.Getenv("PORT")
@@ -63,6 +64,11 @@ func handlePlayerData(w http.ResponseWriter, r *http.Request) {
 	if err := json.NewEncoder(w).Encode(staticPlayers); err != nil {
 		slog.Error("failed to encode response", "err", err)
 	}
+}
+
+func handleHealth(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Write([]byte(`{"status":"ok"}`))
 }
 
 func loggingMiddleware(next http.Handler) http.Handler {
