@@ -4,3 +4,8 @@ kind: Kustomization
 resources:
   - deployment.yaml
   - service.yaml
+
+images:
+  - name: player-data-api
+    newName: docker.io/lanrell/player-data-api
+    newTag: latest

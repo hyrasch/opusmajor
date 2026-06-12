@@ -1,5 +1,5 @@
 IMAGE_NAME ?= player-data-api
-IMAGE_TAG  ?= latest
+IMAGE_TAG  ?= $(shell git describe --tags --always)
 REGISTRY   ?= docker.io/lanrell
 
 FULL_IMAGE := $(REGISTRY)/$(IMAGE_NAME):$(IMAGE_TAG)
@@ -22,6 +22,10 @@ docker-push:
 
 .PHONY: docker-publish
 docker-publish: docker-build docker-push
+	cd k8s/base && kubectl kustomize edit set image player-data-api=$(FULL_IMAGE)
+	git add k8s/base/kustomization.yaml
+	git commit -m "chore: bump image to $(IMAGE_TAG)"
+	git push
 
 # ── K8S / ArgoCD ───────────────────────────────────────────────────────
 
@@ -42,6 +46,10 @@ argocd-install:
 .PHONY: argocd-apply
 argocd-apply:
 	kubectl apply -f argocd/application.yaml
+
+.PHONY: argocd-refresh
+argocd-refresh:
+	kubectl annotate application player-data-api -n argocd argocd.argoproj.io/refresh=normal --overwrite
 
 .PHONY: open
 open:
